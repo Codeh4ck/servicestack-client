@@ -215,6 +215,8 @@ export class ServerEventsClient {
 
     constructor(
         baseUrl: string,
+        streamPath: string,
+        withCredentials: boolean,
         public channels: string[],
         public options: IEventSourceOptions = {},
         public eventSource: IEventSourceStatic = null) {
@@ -223,11 +225,11 @@ export class ServerEventsClient {
 
         this.resolver = this.options.resolver || new NewInstanceResolver();
 
-        this.eventStreamUri = combinePaths(baseUrl, "event-stream") + "?";
+        this.eventStreamUri = combinePaths(baseUrl, streamPath) + "?";
         this.updateChannels(channels);
         this.serviceClient = new JsonServiceClient(baseUrl);
         this.listeners = {};
-        this.withCredentials = true;
+        this.withCredentials = withCredentials;
 
         if (!this.options.handlers)
             this.options.handlers = {};
