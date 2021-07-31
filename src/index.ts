@@ -335,7 +335,7 @@ export class ServerEventsClient {
                             return;
                         }
 
-                        fetch(new Request(opt.heartbeatUrl, { method: "POST", mode: "cors", headers: headers, credentials: this.serviceClient.credentials }))
+                        fetch(new Request(opt.heartbeatUrl, { method: "POST", mode: "cors", headers: headers, credentials: 'omit' }))
                             .then(res => { if (!res.ok) throw new Error(`${res.status} - ${res.statusText}`); })
                             .catch(error => this.reconnectServerEvents({ error }));
                     }, (this.connectionInfo && this.connectionInfo.heartbeatIntervalMs) || opt.heartbeatIntervalMs || 10000);
@@ -483,7 +483,7 @@ export class ServerEventsClient {
             return new Promise<void>((resolve, reject) => resolve());
 
         this.connectionInfo = null;
-        return fetch(new Request(hold.unRegisterUrl, { method: "POST", mode: "cors", credentials: this.serviceClient.credentials }))
+        return fetch(new Request(hold.unRegisterUrl, { method: "POST", mode: "cors", credentials: 'omit' }))
             .then(res => { if (!res.ok) throw new Error(`${res.status} - ${res.statusText}`); })
             .catch(this.onError);
     }
