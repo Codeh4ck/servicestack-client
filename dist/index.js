@@ -650,7 +650,7 @@ var __assign = (this && this.__assign) || function () {
             this.replyBaseUrl = combinePaths(baseUrl, "json", "reply") + "/";
             this.oneWayBaseUrl = combinePaths(baseUrl, "json", "oneway") + "/";
             this.mode = "cors";
-            this.credentials = 'include';
+            this.credentials = 'same-origin';
             this.headers = new Headers();
             this.headers.set("Content-Type", "application/json");
             this.manageCookies = typeof document == "undefined"; //because node-fetch doesn't
