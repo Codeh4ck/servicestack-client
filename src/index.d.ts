@@ -180,7 +180,7 @@ export declare class ServerEventsClient {
     };
     EventSource: IEventSourceStatic;
     withCredentials: boolean;
-    constructor(baseUrl: string, channels: string[], options?: IEventSourceOptions, eventSource?: IEventSourceStatic);
+    constructor(baseUrl: string, streamPath: string, withCredentials: boolean, channels: string[], options?: IEventSourceOptions, eventSource?: IEventSourceStatic);
     onMessage: (e: IOnMessageEvent) => void;
     _onMessage: (e: IOnMessageEvent) => void;
     onError: (error?: any) => void;
