@@ -291,7 +291,7 @@ describe ('JsonServiceClient Auth Tests', () => {
             //     { method:"POST", headers, credentials:"include" });
 
             // Remote Server needs `new JwtAuthProvider { AllowInQueryString = true }`
-            var sseClient = new ServerEventsClient(TEST_URL, ["*"], {
+            var sseClient = new ServerEventsClient(TEST_URL, 'event-stream', true, ["*"], {
                 // Works in both browers + node.exe server apps
                 resolveStreamUrl: url => appendQueryString(url, { "ss-tok": response.token }),
                 handlers: {

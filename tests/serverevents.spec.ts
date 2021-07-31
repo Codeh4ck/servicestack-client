@@ -104,7 +104,7 @@ const SERVER_EVENTS_URL = 'http://test.servicestack.net';
 describe ('ServerEventsClient Tests', () => {
 
     it ('Can connect to ServerEventsStream', done => {
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: (e => {
                     // console.log('onConnect: ', e);
@@ -115,7 +115,7 @@ describe ('ServerEventsClient Tests', () => {
     })
 
     it ('Does fire onJoin events', done => {
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: ((e:ServerEventConnect) => {
                     chai.expect(e.heartbeatUrl).to.satisfy(x => x.startsWith(SERVER_EVENTS_URL));
@@ -134,7 +134,7 @@ describe ('ServerEventsClient Tests', () => {
         var channels = ["A", "B", "C"];
         var joinMsgs:ServerEventJoin[] = []; 
 
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, channels, {
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, channels, {
             handlers: {
                 onJoin: ((e:ServerEventJoin) => {
                     // console.log(e);
@@ -158,7 +158,7 @@ describe ('ServerEventsClient Tests', () => {
 
         var states = [];
 
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: (e => connectMsgs.push(e)),
                 onCommand: (e => commands.push(e)),
@@ -185,7 +185,7 @@ describe ('ServerEventsClient Tests', () => {
                 connectMsgs = [];
                 commands = [];
 
-                client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+                client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
                     handlers: {
                         onConnect: (e => connectMsgs.push(e)),
                     },
@@ -226,7 +226,7 @@ describe ('ServerEventsClient Tests', () => {
         var states = [];
 
         var client2 = null;
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: (e => connectMsgs.push(e)),
                 onCommand: (e => commands.push(e)),
@@ -241,7 +241,7 @@ describe ('ServerEventsClient Tests', () => {
         states.unshift({
             test: () => connectMsgs.length > 0 && commands.length > 0,
             fn() {
-                client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+                client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
                     handlers: {
                         onConnect: (e => connectMsgs.push(e)),
                         onMessage: (e => msgs2.push(e))
@@ -308,7 +308,7 @@ describe ('ServerEventsClient Tests', () => {
         
         var heartbeats:ServerEventHeartbeat[] = [];
 
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: ((e:ServerEventConnect) => e.heartbeatIntervalMs = 1000), //override to 1s
                 onHeartbeat: (e => {
@@ -332,7 +332,7 @@ describe ('ServerEventsClient Tests', () => {
         var states = [];
 
         var client2 = null;
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onConnect: (e => connectMsgs.push(e)),
                 onMessage: (e => msgs1.push(e))
@@ -349,7 +349,7 @@ describe ('ServerEventsClient Tests', () => {
             fn() {
                 return client1.serviceClient.post(new ResetServerEvents())
                     .then(r => {
-                        client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+                        client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
                             handlers: {
                                 onConnect: (e => connectMsgs.push(e)),
                             },
@@ -376,7 +376,7 @@ describe ('ServerEventsClient Tests', () => {
         var chatMsgs:ChatMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 chat: (chatMsg:ChatMessage, e:ServerEventMessage) => {
                     // console.log(chatMsg);
@@ -412,7 +412,7 @@ describe ('ServerEventsClient Tests', () => {
         var announceMsgs:string[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 announce: (msg:string, e:ServerEventMessage) => {
                     // console.log(msg, e);
@@ -450,7 +450,7 @@ describe ('ServerEventsClient Tests', () => {
         var msgs1:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onMessage: e => {
                     //console.log(`msg #${msgs1.length+1}:`, e);
@@ -524,7 +524,7 @@ describe ('ServerEventsClient Tests', () => {
         var msgs1:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onMessage: e => msgs1.push(e)
             },
@@ -557,7 +557,7 @@ describe ('ServerEventsClient Tests', () => {
         var msgs1:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onMessage: e => msgs1.push(e)
             },
@@ -592,7 +592,7 @@ describe ('ServerEventsClient Tests', () => {
         var msgs1:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             handlers: {
                 onMessage: e => msgs1.push(e)
             },
@@ -656,7 +656,7 @@ describe ('ServerEventsClient Tests', () => {
         var msgs1:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             resolver: new SingletonInstanceResolver(),
             handlers: {
                 onMessage: e => msgs1.push(e)
@@ -691,16 +691,16 @@ describe ('ServerEventsClient Tests', () => {
         var msgsABCD:ServerEventMessage[] = [];
 
         var states = [];
-        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, ["A"], {
+        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A"], {
             handlers: { onMessage: e => msgsA.push(e) }, onTick: run(states)
         });
-        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, ["A", "B"], {
+        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A", "B"], {
             handlers: { onMessage: e => msgsAB.push(e) }, onTick: run(states)
         });
-        var clientABC = new ServerEventsClient(SERVER_EVENTS_URL, ["A", "B", "C"], {
+        var clientABC = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A", "B", "C"], {
             handlers: { onMessage: e => msgsABC.push(e) }, onTick: run(states)
         });
-        var clientABCD = new ServerEventsClient(SERVER_EVENTS_URL, ["A", "B", "C", "D"], {
+        var clientABCD = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A", "B", "C", "D"], {
             handlers: { onMessage: e => msgsABCD.push(e) }, onTick: run(states)
         });
         var allClients = [clientA,clientAB,clientABC,clientABCD];
@@ -771,13 +771,13 @@ describe ('ServerEventsClient Tests', () => {
         var leaveAB:ServerEventJoin[] = [];
 
         var states = [];
-        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, ["A"], {
+        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A"], {
             handlers: { onJoin: e => joinA.push(e), onLeave: e => leaveA.push(e) }, onTick: run(states)
         });
-        var clientB = new ServerEventsClient(SERVER_EVENTS_URL, ["B"], {
+        var clientB = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["B"], {
             handlers: { onJoin: e => joinB.push(e), onLeave: e => leaveB.push(e) }, onTick: run(states)
         });
-        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, ["A", "B"], {
+        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A", "B"], {
             handlers: { onJoin: e => joinAB.push(e), onLeave: e => leaveAB.push(e) }, onTick: run(states)
         });
 
@@ -851,13 +851,13 @@ describe ('ServerEventsClient Tests', () => {
         var leaveAB:ServerEventJoin[] = [];
 
         var states = [];
-        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, ["A"], {
+        var clientA = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A"], {
             handlers: { onJoin: e => joinA.push(e), onLeave: e => leaveA.push(e) }, onTick: run(states)
         });
-        var clientB = new ServerEventsClient(SERVER_EVENTS_URL, ["B"], {
+        var clientB = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["B"], {
             handlers: { onJoin: e => joinB.push(e), onLeave: e => leaveB.push(e) }, onTick: run(states)
         });
-        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, ["A", "B"], {
+        var clientAB = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A", "B"], {
             handlers: { onJoin: e => joinAB.push(e), onLeave: e => leaveAB.push(e) }, onTick: run(states)
         });
 
@@ -896,11 +896,11 @@ describe ('ServerEventsClient Tests', () => {
         var msgs2:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["A"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A"], {
             handlers: { onMessage: e => msgs1.push(e) }, 
             onTick: run(states)
         }).start();
-        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["B"], {
+        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["B"], {
             handlers: { onMessage: e => msgs2.push(e) }, 
             onTick: run(states)
         }).start();
@@ -969,11 +969,11 @@ describe ('ServerEventsClient Tests', () => {
         var msgs2:ServerEventMessage[] = [];
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["A","B","C"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["A","B","C"], {
             handlers: { onMessage: e => msgs1.push(e) }, 
             onTick: run(states)
         }).start();
-        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["B","C"], {
+        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["B","C"], {
             handlers: { onMessage: e => msgs2.push(e) }, 
             onTick: run(states)
         }).start();
@@ -1039,14 +1039,14 @@ describe ('ServerEventsClient Tests', () => {
         };
 
         var states = [];
-        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client1 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             onTick: run(states)
         })
         .addListener("customEvent", handler)
         .addListener("customEvent", e => msgs2.push(e))
         .start();
 
-        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             onTick: run(states)
         }).start();
 
@@ -1083,7 +1083,7 @@ describe ('ServerEventsClient Tests', () => {
         var errors = [];
         var states = [];
 
-        var client1 = new ServerEventsClient('http://chat.servicestack.invalid', ["*"], {
+        var client1 = new ServerEventsClient('http://chat.servicestack.invalid', 'event-stream', true, ["*"], {
             onException: (e) => {
                 chai.expect(e).to.exist;
                 errors.push(e);
@@ -1091,7 +1091,7 @@ describe ('ServerEventsClient Tests', () => {
             onTick: run(states)
         }).start();
 
-        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+        var client2 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
             onTick: run(states)
         }).start();
         
@@ -1100,7 +1100,7 @@ describe ('ServerEventsClient Tests', () => {
         states.unshift({ 
             test: () => errors.length >= 1,
             fn(){
-                client3 = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {
+                client3 = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {
                     handlers: {
                         onConnect: (e:ServerEventConnect) => {
                             e.heartbeatIntervalMs = 1000;
@@ -1126,7 +1126,7 @@ describe ('ServerEventsClient Tests', () => {
     })
 
     it ('Does create EventSource instance withCredentials', () => {
-        var client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {})
+        var client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {})
             .start();
 
         chai.expect(client.getEventSourceOptions().withCredentials).eq(true);
@@ -1138,7 +1138,7 @@ describe ('ServerEventsClient Tests', () => {
 
         client.stop();
 
-        client = new ServerEventsClient(SERVER_EVENTS_URL, ["*"], {});
+        client = new ServerEventsClient(SERVER_EVENTS_URL, 'event-stream', true, ["*"], {});
         client.withCredentials = false;
         client.start();
 
