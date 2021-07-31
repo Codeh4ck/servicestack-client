@@ -219,7 +219,7 @@ var __assign = (this && this.__assign) || function () {
                                     _this.reconnectServerEvents({ error: new Error("EventSource is CLOSED") });
                                     return;
                                 }
-                                fetch(new Request(opt.heartbeatUrl, { method: "POST", mode: "cors", headers: headers, credentials: _this.serviceClient.credentials }))
+                                fetch(new Request(opt.heartbeatUrl, { method: "POST", mode: "cors", headers: headers, credentials: 'omit' }))
                                     .then(function (res) { if (!res.ok)
                                     throw new Error(res.status + " - " + res.statusText); })
                                     .catch(function (error) { return _this.reconnectServerEvents({ error: error }); });
@@ -367,7 +367,7 @@ var __assign = (this && this.__assign) || function () {
             if (hold == null || hold.unRegisterUrl == null)
                 return new Promise(function (resolve, reject) { return resolve(); });
             this.connectionInfo = null;
-            return fetch(new Request(hold.unRegisterUrl, { method: "POST", mode: "cors", credentials: this.serviceClient.credentials }))
+            return fetch(new Request(hold.unRegisterUrl, { method: "POST", mode: "cors", credentials: 'omit' }))
                 .then(function (res) { if (!res.ok)
                 throw new Error(res.status + " - " + res.statusText); })
                 .catch(this.onError);
